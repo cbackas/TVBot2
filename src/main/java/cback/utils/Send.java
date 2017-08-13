@@ -15,10 +15,9 @@ import java.awt.*;
 public class Send {
     /*
      * Simple Embeds
-     * todo add "theme color" (.withColor) for all generic embeds
      */
     public static void simpleEmbed(IChannel channel, String message) {
-        Send.embed(channel, new EmbedBuilder().withDescription(message).build());
+        Send.embed(channel, new EmbedBuilder().withDescription(message).withColor(TVBot.BOT_COLOR).build());
     }
 
     /*
