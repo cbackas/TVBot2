@@ -25,8 +25,9 @@ public class ConfigManager {
         defaultConfig.put("joined", "0");
         defaultConfig.put("left", "0");
         defaultConfig.put("muted", new ArrayList<String>());
-        defaultConfig.put("botlog_webhook", "URL");
-        defaultConfig.put("errors_webhook", "URL");
+        defaultConfig.put("server_hub_id", "URL");
+        defaultConfig.put("botlog_ID", "URL");
+        defaultConfig.put("errors_ID", "URL");
         defaultConfig.put("bot_color", "023563");
     }
 
