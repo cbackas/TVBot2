@@ -1,9 +1,9 @@
 package cback.utils;
 
-import ca.momoperes.canarywebhooks.DiscordMessage;
-import ca.momoperes.canarywebhooks.embed.DiscordEmbed;
+import cback.ConfigManager;
 import cback.Report;
 import cback.TVBot;
+import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.EmbedBuilder;
@@ -17,7 +17,8 @@ public class Send {
      * Simple Embeds
      */
     public static void simpleEmbed(IChannel channel, String message) {
-        Send.embed(channel, new EmbedBuilder().withDescription(message).withColor(TVBot.BOT_COLOR).build());
+        Color BOT_COLOR = Color.getColor(TVBot.getConfigManager().getConfigValue("bot_color"));
+        Send.embed(channel, new EmbedBuilder().withDescription(message).withColor(BOT_COLOR).build());
     }
 
     /*
@@ -41,27 +42,46 @@ public class Send {
      * Send Report
      */
     public static void report(Report report) {
-        String REPORT_WEBHOOK = TVBot.getConfigManager().getConfigValue("errors_webhook");
-        Report sReport = report;
+        IDiscordClient client = TVBot.getClient();
+        ConfigManager cm = TVBot.getConfigManager();
 
-        DiscordEmbed embed = new DiscordEmbed.Builder()
-                .withTitle("Our title") // The title of the embed element
-                .withURL("https://github.com/momothereal") // The URL of the embed element
-                .withDescription("momothereal's github page") // The description of the embed object
-                .withColor(TVBot.BOT_COLOR)
-                .build(); // Build the embed element
+        IChannel errorChannel = client.getChannelByID(Long.parseLong(cm.getConfigValue("errors_ID")));
+        Color BOT_COLOR = Color.getColor(cm.getConfigValue("bot_color"));
 
-        DiscordMessage message = new DiscordMessage.Builder("Check out this link:") // The content of the message
-                .withEmbed(embed) // Add our embed object
-                .withUsername("cool guy") // Override the username of the bot
-                .build(); // Build the message
+        IMessage message = report.getMessage();
+        Exception e = report.getException();
 
-        try {
-            Util.webhook(REPORT_WEBHOOK).sendPayload(message);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        EmbedBuilder bld = new EmbedBuilder()
+                .withColor(BOT_COLOR)
+                .withAuthorName(message.getAuthor().getName() + '#' + message.getAuthor().getDiscriminator())
+                .withAuthorIcon(Util.getAvatar(message.getAuthor()))
+                .withDesc(message.getContent())
+                .appendField("\u200B", "\u200B", false)
 
+                .appendField("Stack:", e.toString(), false)
+                .withTimestamp(System.currentTimeMillis());
+
+        Send.embed(errorChannel, bld.build());
 
     }
+
+    /*
+     * Send BotLog
+     */
+    public static void botLog(IMessage message) {
+        IDiscordClient client = TVBot.getClient();
+        ConfigManager cm = TVBot.getConfigManager();
+
+        IChannel botLogChannel = client.getChannelByID(Long.parseLong(cm.getConfigValue("errors_ID")));
+        Color BOT_COLOR = Color.getColor(cm.getConfigValue("bot_color"));
+
+        EmbedBuilder bld = new EmbedBuilder()
+                .withColor(BOT_COLOR)
+                .withAuthorName(message.getAuthor().getName() + '#' + message.getAuthor().getDiscriminator())
+                .withAuthorIcon(Util.getAvatar(message.getAuthor()))
+                .withDesc(message.getFormattedContent());
+
+        Send.embed(botLogChannel, bld.build());
+    }
+
 }
