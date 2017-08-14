@@ -72,7 +72,7 @@ public class Send {
         IDiscordClient client = TVBot.getClient();
         ConfigManager cm = TVBot.getConfigManager();
 
-        IChannel botLogChannel = client.getChannelByID(Long.parseLong(cm.getConfigValue("errors_ID")));
+        IChannel botLogChannel = client.getChannelByID(Long.parseLong(cm.getConfigValue("botlog_ID")));
         Color BOT_COLOR = Color.getColor(cm.getConfigValue("bot_color"));
 
         EmbedBuilder bld = new EmbedBuilder()
