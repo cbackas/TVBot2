@@ -14,7 +14,6 @@ import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.modules.Configuration;
 import sx.blah.discord.util.DiscordException;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,12 +27,9 @@ public class TVBot {
     private static TVBot instance;
     private IDiscordClient client;
     private static ConfigManager configManager;
-    private Report report;
 
     public static List<Command> registeredCommands = new ArrayList<>();
     private static final Pattern COMMAND_PATTERN = Pattern.compile("^\\?([^\\s]+) ?(.*)", Pattern.CASE_INSENSITIVE);
-
-    public static final Color BOT_COLOR = Color.getColor(TVBot.getConfigManager().getConfigValue("bot_color"));
 
     private long startTime;
 
@@ -103,8 +99,9 @@ public class TVBot {
 
                 Command cCommand = command.get();
 
-                if (cCommand.getPermissions().isEmpty() || !Collections.disjoint(roleIDs, cCommand.getPermissions())) {
+                if (cCommand.getPermissions() == null || !Collections.disjoint(roleIDs, cCommand.getPermissions())) {
                     cCommand.execute(message, content, argsArr, author, guild, roleIDs, isPrivate, client, this);
+                    Send.botLog(message);
                 } else {
                     Send.simpleEmbed(message.getChannel(), "You don't have permission to perform this command.");
                 }
@@ -131,7 +128,6 @@ public class TVBot {
     }
 
     public static ConfigManager getConfigManager() { return configManager; }
-
 
     private void registerAllCommands() {
         new Reflections("cback.commands").getSubTypesOf(Command.class).forEach(commandImpl -> {
