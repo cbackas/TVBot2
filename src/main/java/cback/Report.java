@@ -15,15 +15,7 @@ public class Report {
         return message;
     }
 
-    public void setMessage(IMessage message) {
-        this.message = message;
-    }
-
     public Exception getException() {
         return e;
-    }
-
-    public void setException(Exception e) {
-        this.e = e;
     }
 }
