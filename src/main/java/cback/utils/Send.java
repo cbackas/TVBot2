@@ -58,7 +58,15 @@ public class Send {
                 .withDesc(message.getContent())
                 .appendField("\u200B", "\u200B", false)
 
-                .appendField("Stack:", e.toString(), false)
+                .appendField("Exeption:", e.toString(), false);
+
+        StringBuilder stack = new StringBuilder();
+        for (StackTraceElement s : e.getStackTrace()) {
+            stack.append(s.toString());
+        }
+
+        bld
+                .appendField("Stack:", stack.toString().substring(0, 1800), false)
                 .withTimestamp(System.currentTimeMillis());
 
         Send.embed(errorChannel, bld.build());
