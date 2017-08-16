@@ -25,11 +25,14 @@ import java.util.stream.Collectors;
 public class TVBot {
 
     private static TVBot instance;
+
     private IDiscordClient client;
     private static ConfigManager configManager;
 
-    public static List<Command> registeredCommands = new ArrayList<>();
-    private static final Pattern COMMAND_PATTERN = Pattern.compile("^\\?([^\\s]+) ?(.*)", Pattern.CASE_INSENSITIVE);
+    public List<Command> registeredCommands = new ArrayList<>();
+
+    private String pattern = "^\\\\" + configManager.getConfigValue("command_prefix") + "([^\\s]+) ?(.*)";
+    public Pattern COMMAND_PATTERN = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
 
     private long startTime;
 
@@ -124,7 +127,9 @@ public class TVBot {
     /*
      * Misc Utilities
      */
-    public static TVBot getInstance() { return instance; }
+    public static TVBot getInstance() {
+        return instance;
+    }
 
     public static IDiscordClient getClient() {
         return instance.client;
