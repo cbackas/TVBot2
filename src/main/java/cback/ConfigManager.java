@@ -21,6 +21,7 @@ public class ConfigManager {
     static {
         //Insert all default config values here. They will be added on startup if they do not exist.
         defaultConfig.put("botToken", "TOKEN");
+        defaultConfig.put("command_prefix", "?");
         defaultConfig.put("userCount", "0");
         defaultConfig.put("joined", "0");
         defaultConfig.put("left", "0");
