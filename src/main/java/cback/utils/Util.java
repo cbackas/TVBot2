@@ -14,8 +14,6 @@ import sx.blah.discord.util.MessageBuilder;
 import sx.blah.discord.util.RequestBuffer;
 
 import java.awt.*;
-import java.io.File;
-import java.net.URISyntaxException;
 
 public class Util {
     static IDiscordClient client = TVBot.getClient();
