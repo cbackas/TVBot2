@@ -6,7 +6,7 @@ public class Report {
     private IMessage message;
     private Exception e;
 
-    private Report(IMessage message, Exception e) {
+    public Report(IMessage message, Exception e) {
         this.message = message;
         this.e = e;
     }
