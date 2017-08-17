@@ -31,10 +31,15 @@ public class TVBot {
 
     public List<Command> registeredCommands = new ArrayList<>();
 
-    private String pattern = "^\\\\" + configManager.getConfigValue("command_prefix") + "([^\\s]+) ?(.*)";
+    private static String prefix;
+    private String pattern = "^\\\\" + prefix + "([^\\s]+) ?(.*)";
     public Pattern COMMAND_PATTERN = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
 
     private long startTime;
+
+    public static void main(String[] args) {
+        new TVBot();
+    }
 
     public TVBot() {
         instance = this;
@@ -60,6 +65,8 @@ public class TVBot {
             System.exit(0);
             return;
         }
+
+        prefix = configManager.getConfigValue("command_prefix");
 
         ClientBuilder clientBuilder = new ClientBuilder();
         clientBuilder.withToken(token.get());
@@ -107,9 +114,9 @@ public class TVBot {
                  */
                 if (cCommand.getPermissions() == null || !Collections.disjoint(roleIDs, cCommand.getPermissions())) {
                     cCommand.execute(message, content, argsArr, author, guild, roleIDs, isPrivate, client, this);
-                    Send.botLog(message);
+                    Util.botLog(message);
                 } else {
-                    Send.simpleEmbed(message.getChannel(), "You don't have permission to perform this command.");
+                    Util.simpleEmbed(message.getChannel(), "You don't have permission to perform this command.");
                 }
             }
         } else if (!message.getChannel().isPrivate()){
@@ -136,6 +143,8 @@ public class TVBot {
     }
 
     public static ConfigManager getConfigManager() { return configManager; }
+
+    public static String getPrefix() { return prefix; }
 
     private void registerAllCommands() {
         new Reflections("cback.commands").getSubTypesOf(Command.class).forEach(commandImpl -> {
