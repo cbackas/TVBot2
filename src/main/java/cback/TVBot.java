@@ -31,9 +31,8 @@ public class TVBot {
 
     public List<Command> registeredCommands = new ArrayList<>();
 
-    private static String prefix;
-    private String pattern = "^\\\\" + prefix + "([^\\s]+) ?(.*)";
-    public Pattern COMMAND_PATTERN = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
+    static private String prefix = "?";
+    public Pattern COMMAND_PATTERN = Pattern.compile("^\\?([^\\s]+) ?(.*)", Pattern.CASE_INSENSITIVE);
 
     private long startTime;
 
