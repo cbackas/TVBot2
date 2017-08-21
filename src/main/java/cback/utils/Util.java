@@ -28,6 +28,13 @@ public class Util {
     }
 
     /**
+     * Returns the bot's color as a Color object
+     */
+    public static Color getBotColor() {
+        return BOT_COLOR;
+    }
+
+    /**
      * Simple Embeds
      */
     public static void simpleEmbed(IChannel channel, String message) {
