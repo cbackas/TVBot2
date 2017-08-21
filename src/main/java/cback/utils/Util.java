@@ -35,7 +35,7 @@ public class Util {
     }
 
     public static void simpleEmbed(IChannel channel, String message, Color color) {
-        embed(channel, new EmbedBuilder().withDescription(message).withColor(BOT_COLOR).build());
+        embed(channel, new EmbedBuilder().withDescription(message).withColor(color).build());
     }
 
     /**
@@ -66,6 +66,7 @@ public class Util {
 
         EmbedBuilder bld = new EmbedBuilder()
                 .withColor(BOT_COLOR)
+                .withTimestamp(System.currentTimeMillis())
                 .withAuthorName(message.getAuthor().getName() + '#' + message.getAuthor().getDiscriminator())
                 .withAuthorIcon(getAvatar(message.getAuthor()))
                 .withDesc(message.getContent())
@@ -76,11 +77,16 @@ public class Util {
         StringBuilder stack = new StringBuilder();
         for (StackTraceElement s : e.getStackTrace()) {
             stack.append(s.toString());
+            stack.append("\n");
         }
 
-        bld
-                .appendField("Stack:", stack.toString().substring(0, 1800), false)
-                .withTimestamp(System.currentTimeMillis());
+        String stackString = stack.toString();
+        if (stackString.length() > 1800) {
+            stackString = stackString.substring(0, 1800);
+        }
+
+            bld
+                    .appendField("Stack:", stackString, false);
 
         embed(errorChannel, bld.build());
     }
@@ -91,13 +97,13 @@ public class Util {
     public static void botLog(IMessage message) {
         try {
         IChannel botLogChannel = client.getChannelByID(Long.parseLong(cm.getConfigValue("botlog_ID")));
-        Color BOT_COLOR = Color.getColor(cm.getConfigValue("bot_color"));
 
         EmbedBuilder bld = new EmbedBuilder()
                 .withColor(BOT_COLOR)
                 .withAuthorName(message.getAuthor().getName() + '#' + message.getAuthor().getDiscriminator())
                 .withAuthorIcon(getAvatar(message.getAuthor()))
-                .withDesc(message.getFormattedContent());
+                .withDesc(message.getFormattedContent())
+                .withFooterText(message.getGuild().getName() + "/#" + message.getChannel().getName());
 
         embed(botLogChannel, bld.build());
     } catch (Exception e) {
