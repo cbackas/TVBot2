@@ -29,7 +29,7 @@ public class TVBot {
     private IDiscordClient client;
     private static ConfigManager configManager;
 
-    public List<Command> registeredCommands = new ArrayList<>();
+    public static List<Command> registeredCommands = new ArrayList<>();
 
     static private String prefix = "?";
     public Pattern COMMAND_PATTERN = Pattern.compile("^\\?([^\\s]+) ?(.*)", Pattern.CASE_INSENSITIVE);
