@@ -1,6 +1,7 @@
 package cback;
 
 import cback.commands.Command;
+import cback.events.MessageChange;
 import cback.utils.*;
 import org.reflections.Reflections;
 import sx.blah.discord.api.ClientBuilder;
@@ -32,7 +33,8 @@ public class TVBot {
     public static List<Command> registeredCommands = new ArrayList<>();
 
     static private String prefix = "?";
-    public Pattern COMMAND_PATTERN = Pattern.compile("^\\?([^\\s]+) ?(.*)", Pattern.CASE_INSENSITIVE);
+    private Pattern COMMAND_PATTERN = Pattern.compile("^\\?([^\\s]+) ?(.*)", Pattern.CASE_INSENSITIVE);
+    public List<String> prefixes = new ArrayList<>();
 
     private long startTime;
 
@@ -46,9 +48,15 @@ public class TVBot {
 
         //instantiate config manager first as connect() relies on tokens
         configManager = new ConfigManager(this);
+        prefixes.add(TVBot.getPrefix());
+        prefixes.add("t!");
+        prefixes.add("!");
+        prefixes.add("!g");
+        prefixes.add("--");
 
         connect();
         client.getDispatcher().registerListener(this);
+        client.getDispatcher().registerListener(new MessageChange(this));
     }
 
     private void connect() {
