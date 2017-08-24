@@ -1,6 +1,6 @@
 package cback;
 
-public enum TVRoles {
+public enum Roles {
     STAFF("STAFF", 227213155917496330l),
     ADMIN("ADMIN", 192441946210435072l),
     HEADMOD("HEADMOD", 263126026261889024l),
@@ -12,13 +12,13 @@ public enum TVRoles {
     public String name;
     public Long id;
 
-    TVRoles(String name, Long id) {
+    Roles(String name, Long id) {
         this.name = name;
         this.id = id;
     }
 
-    public static TVRoles getRole(String name) {
-        for (TVRoles role : values()) {
+    public static Roles getRole(String name) {
+        for (Roles role : values()) {
             if (role.name.equalsIgnoreCase(name)) {
                 return role;
             }
