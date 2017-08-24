@@ -30,6 +30,7 @@ public class ConfigManager {
         defaultConfig.put("botlog_ID", "URL");
         defaultConfig.put("errors_ID", "URL");
         defaultConfig.put("bot_color", "023563");
+        defaultConfig.put("MESSAGE_LOGS", "ID");
     }
 
     public ConfigManager(TVBot bot) {
