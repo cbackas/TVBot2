@@ -26,8 +26,11 @@ public class MemberChange {
     public void memberJoin(UserJoinEvent event) {
         IUser user = event.getUser();
         IGuild guild = event.getGuild();
-        //Mute Check
-       if (bot.getConfigManager().getConfigArray("muted").contains(user.getStringID())) {
+
+        /**
+         * Mute check
+         */
+        if (bot.getConfigManager().getConfigArray("muted").contains(user.getStringID())) {
             try {
                 user.addRole(guild.getRoleByID(Long.parseLong("269638591112544267")));
             } catch (Exception e) {
@@ -35,17 +38,26 @@ public class MemberChange {
             }
         }
 
-        //Join Counter
+        /**
+         * Update member counters
+         */
         int joinedUsers = Integer.parseInt(bot.getConfigManager().getConfigValue("joined"));
         bot.getConfigManager().setConfigValue("joined", String.valueOf(joinedUsers + 1));
 
-        //Notifier
+        /**
+         * Admin memberCount notifier
+         * todo make configurable
+         */
         int totalUsers = guild.getUsers().size();
         if (totalUsers % 1000 == 0) {
             Util.sendMessage(guild.getChannelByID(285470408709373954l), guild.getRoleByID(Roles.ADMIN.id).mention() + " we have hit " + totalUsers + " users hype");
         }
 
-        //Member-log
+        /**
+         * Member Log
+         * todo configurable messagelog channel
+         * todo add account creation date into the message
+         */
         EmbedBuilder bld = new EmbedBuilder()
                 .withDesc(Util.getTag(user) + " **joined** the server. " + user.mention());
 
@@ -67,16 +79,25 @@ public class MemberChange {
         IUser user = event.getUser();
         IGuild guild = event.getGuild();
 
-        //Mute Check
+        /**
+         * Mute check
+         */
         if (bot.getConfigManager().getConfigArray("muted").contains(event.getUser().getStringID())) {
             Util.sendMessage(guild.getChannelByID(Long.parseLong("266651712826114048")), user + " is muted and left the server. Their mute will be applied again when/if they return.");
         }
 
-        //Leave Counter
+        /**
+         * Update member counters
+         */
         int left = Integer.parseInt(bot.getConfigManager().getConfigValue("left"));
         bot.getConfigManager().setConfigValue("left", String.valueOf(left + 1));
 
-        //Member-log
+
+        /**
+         * Memberlog
+         * todo configurable messagelog channel
+         * todo add account creation date into the message
+         */
         EmbedBuilder bld = new EmbedBuilder()
                 .withDesc(Util.getTag(user) + " **left** the server. " + user.mention())
                 .withTimestamp(System.currentTimeMillis())
@@ -91,18 +112,26 @@ public class MemberChange {
         IUser user = event.getUser();
         IGuild guild = event.getGuild();
 
-        //Mute Check
+        /**
+         * Mute check
+         */
         if (bot.getConfigManager().getConfigArray("muted").contains(user.getStringID())) {
             List<String> mutedUsers = bot.getConfigManager().getConfigArray("muted");
             mutedUsers.remove(user.getStringID());
             bot.getConfigManager().setConfigValue("muted", mutedUsers);
         }
 
-        //Leave Counter
+        /**
+         * Update member counters
+         */
         int left = Integer.parseInt(bot.getConfigManager().getConfigValue("left"));
         bot.getConfigManager().setConfigValue("left", String.valueOf(left + 1));
 
-        //Member-log
+        /**
+         * Memberlog
+         * todo configurable messagelog channel
+         * todo add account creation date into the message
+         */
         EmbedBuilder bld = new EmbedBuilder()
                 .withDesc(Util.getTag(user) + " was **banned** from the server. " + user.mention())
                 .withTimestamp(System.currentTimeMillis())
