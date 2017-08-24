@@ -41,6 +41,18 @@ public class Util {
     }
 
     /**
+     * Returns current time in a format that stuff needs
+     */
+    public static int getCurrentTime() {
+        try {
+            return Math.toIntExact(System.currentTimeMillis() / 1000);
+        } catch (Exception e) {
+            reportHome(e);
+        }
+        return 0;
+    }
+
+    /**
      * Send a regular ol' string message
      */
     public static void sendMessage(IChannel channel, String message) {
@@ -80,7 +92,7 @@ public class Util {
     }
 
     /**
-     * Send Report
+     * Send report
      */
     public static void reportHome(IMessage message, Exception e) {
         IChannel errorChannel = client.getChannelByID(Long.parseLong(cm.getConfigValue("errors_ID")));
@@ -138,7 +150,7 @@ public class Util {
     }
 
     /**
-     * Send BotLog
+     * Send botLog
      */
     public static void botLog(IMessage message) {
         try {
@@ -158,7 +170,7 @@ public class Util {
     }
 
     /**
-     * Command Syntax error
+     * Command syntax error
      */
     public static void syntaxError(Command command, IMessage message) {
         try {
