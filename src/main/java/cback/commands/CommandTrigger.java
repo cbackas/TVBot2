@@ -1,6 +1,5 @@
 package cback.commands;
 
-import cback.Report;
 import cback.TVBot;
 import cback.utils.Util;
 import sx.blah.discord.api.IDiscordClient;
@@ -47,7 +46,7 @@ public class CommandTrigger implements Command {
 
             message.delete();
         } catch (Exception e) {
-            Util.report(new Report(message, e));
+            Util.reportHome(message, e);
         }
     }
 }
