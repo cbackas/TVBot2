@@ -1,6 +1,8 @@
 package cback;
 
 import cback.commands.Command;
+import cback.events.ChannelChange;
+import cback.events.MemberChange;
 import cback.events.MessageChange;
 import cback.utils.*;
 import org.reflections.Reflections;
@@ -58,6 +60,8 @@ public class TVBot {
         connect();
         client.getDispatcher().registerListener(this);
         client.getDispatcher().registerListener(new MessageChange(this));
+        client.getDispatcher().registerListener(new MemberChange(this));
+        client.getDispatcher().registerListener(new ChannelChange((this)));
     }
 
     private void connect() {

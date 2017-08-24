@@ -53,11 +53,10 @@ public class ChannelChange {
                     try {
                         channels.overrideRolePermissions(muted, EnumSet.noneOf(Permissions.class), EnumSet.of(Permissions.SEND_MESSAGES));
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        Util.reportHome(e);
                     }
                 });
             }
-            System.out.println("Set muted role");
             Util.deleteMessage(message);
         }
     }

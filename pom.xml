@@ -78,7 +78,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>cback.Main</mainClass>
+                            <mainClass>cback.TVBot</mainClass>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
                         </manifest>
