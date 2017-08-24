@@ -1,6 +1,5 @@
 package cback.commands;
 
-import cback.Report;
 import cback.TVBot;
 import cback.utils.Util;
 import sx.blah.discord.api.IDiscordClient;
@@ -13,8 +12,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static cback.utils.Util.report;
 
 public class CommandHelp implements Command {
     @Override
@@ -69,7 +66,7 @@ public class CommandHelp implements Command {
             try {
                 Util.embed(message.getAuthor().getOrCreatePMChannel(), embed.withColor(Util.getBotColor()).build());
             } catch (Exception e) {
-                Util.report(new Report(message, e));
+                Util.reportHome(message, e);
             }
         } else {
             Util.syntaxError(this, message);
