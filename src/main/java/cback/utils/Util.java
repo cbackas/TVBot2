@@ -1,7 +1,6 @@
 package cback.utils;
 
 import cback.ConfigManager;
-import cback.Report;
 import cback.TVBot;
 import cback.commands.Command;
 import sx.blah.discord.api.IDiscordClient;
@@ -35,7 +34,25 @@ public class Util {
     }
 
     /**
-     * Simple Embeds
+     * Returns a easy informational sexy tag for a user
+     */
+    public static String getTag(IUser user) {
+        return '@' + user.getName() + '#' + user.getDiscriminator();
+    }
+
+    /**
+     * Send a regular ol' string message
+     */
+    public static void sendMessage(IChannel channel, String message) {
+        try {
+            channel.sendMessage(message);
+        } catch (Exception e) {
+            reportHome(e);
+        }
+    }
+
+    /**
+     * Send simple fast embeds
      */
     public static void simpleEmbed(IChannel channel, String message) {
         embed(channel, new EmbedBuilder().withDescription(message).withColor(BOT_COLOR).build());
@@ -46,7 +63,7 @@ public class Util {
     }
 
     /**
-     * Send Embed
+     * Send embed objects
      */
     public static IMessage embed(IChannel channel, EmbedObject embedObject) {
         channel.setTypingStatus(true);
@@ -65,11 +82,8 @@ public class Util {
     /**
      * Send Report
      */
-    public static void report(Report report) {
+    public static void reportHome(IMessage message, Exception e) {
         IChannel errorChannel = client.getChannelByID(Long.parseLong(cm.getConfigValue("errors_ID")));
-
-        IMessage message = report.getMessage();
-        Exception e = report.getException();
 
         EmbedBuilder bld = new EmbedBuilder()
                 .withColor(BOT_COLOR)
@@ -98,6 +112,31 @@ public class Util {
         embed(errorChannel, bld.build());
     }
 
+    public static void reportHome(Exception e) {
+        IChannel errorChannel = client.getChannelByID(Long.parseLong(cm.getConfigValue("errors_ID")));
+
+        EmbedBuilder bld = new EmbedBuilder()
+                .withColor(BOT_COLOR)
+                .withTimestamp(System.currentTimeMillis())
+                .appendField("Exeption:", e.toString(), false);
+
+        StringBuilder stack = new StringBuilder();
+        for (StackTraceElement s : e.getStackTrace()) {
+            stack.append(s.toString());
+            stack.append("\n");
+        }
+
+        String stackString = stack.toString();
+        if (stackString.length() > 1800) {
+            stackString = stackString.substring(0, 1800);
+        }
+
+        bld
+                .appendField("Stack:", stackString, false);
+
+        embed(errorChannel, bld.build());
+    }
+
     /**
      * Send BotLog
      */
@@ -114,8 +153,7 @@ public class Util {
 
         embed(botLogChannel, bld.build());
     } catch (Exception e) {
-            Report report = new Report(message, e);
-            report(report);
+            reportHome(message, e);
         }
     }
 
@@ -133,9 +171,21 @@ public class Util {
 
             embed(message.getChannel(), bld.build());
         } catch (Exception e) {
-            Report report = new Report(message, e);
-            report(report);
+            reportHome(message, e);
         }
     }
+
+    /**
+     * Delete a message
+     *
+     */
+    public static void deleteMessage(IMessage message) {
+        try {
+            message.delete();
+        } catch (Exception e) {
+            reportHome(message, e);
+        }
+    }
+
 
 }
