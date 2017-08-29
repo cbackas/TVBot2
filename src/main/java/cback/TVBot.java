@@ -11,6 +11,7 @@ import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
@@ -37,6 +38,9 @@ public class TVBot {
     static private String prefix = "?";
     private Pattern COMMAND_PATTERN = Pattern.compile("^\\?([^\\s]+) ?(.*)", Pattern.CASE_INSENSITIVE);
     public List<String> prefixes = new ArrayList<>();
+
+    private static IGuild homeGuild;
+    private static IGuild hubGuild;
 
     private long startTime;
 
@@ -79,6 +83,8 @@ public class TVBot {
         }
 
         prefix = configManager.getConfigValue("command_prefix");
+
+        checkChannels();
 
         ClientBuilder clientBuilder = new ClientBuilder();
         clientBuilder.withToken(token.get());
@@ -132,6 +138,16 @@ public class TVBot {
                 }
             }
         } else if (!message.getChannel().isPrivate()){
+            List<IUser> mentions = message.getMentions();
+            if (mentions.size() >= 10) {
+                try {
+                    guild.banUser(message.getAuthor(), "Mention spam isn't allowed. Cut that out.", 1);
+
+
+                } catch (Exception e) {
+                    Util.reportHome(message, e);
+                }
+            }
         }
     }
 
@@ -159,12 +175,12 @@ public class TVBot {
     public static String getPrefix() { return prefix; }
 
     public static IGuild getHomeGuild() {
-        IGuild homeGuild = getClient().getGuildByID(Long.parseLong(configManager.getConfigValue("HOMESERVER_ID")));
+        homeGuild = getClient().getGuildByID(Long.parseLong(configManager.getConfigValue("HOMESERVER_ID")));
         return homeGuild;
     }
 
     public static IGuild getHubGuild() {
-        IGuild hubGuild = getClient().getGuildByID(346104115169853440l);
+        hubGuild = getClient().getGuildByID(346104115169853440l);
         return hubGuild;
     }
 
@@ -188,6 +204,21 @@ public class TVBot {
                 e.printStackTrace();
             }
         });
+    }
+
+    private void checkChannels() {
+        List<String> channels = new ArrayList<>();
+        channels.add(configManager.getConfigValue("SERVERLOG_ID"));
+        channels.add(configManager.getConfigValue("MESSAGELOGS_ID"));
+
+        for (String id : channels) {
+            try {
+                IChannel channel = getHomeGuild().getChannelByID(Long.parseLong(id));
+                System.out.printf("%s channel matched from config\n", channel.getName());
+            } catch (Exception e) {
+                System.out.printf("ID %s did not match a channel in the home server\n", id);
+            }
+        }
     }
 
     public String getUptime() {
