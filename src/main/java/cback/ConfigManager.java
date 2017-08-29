@@ -25,12 +25,13 @@ public class ConfigManager {
         defaultConfig.put("joined", "0");
         defaultConfig.put("left", "0");
         defaultConfig.put("muted", new ArrayList<String>());
-        defaultConfig.put("server_hub_id", "URL");
-        defaultConfig.put("botlog_ID", "URL");
-        defaultConfig.put("errors_ID", "URL");
         defaultConfig.put("bot_color", "023563");
-        defaultConfig.put("MESSAGE_LOGS", "ID");
+        defaultConfig.put("SERVERHUB_ID", "ID");
         defaultConfig.put("HOMESERVER_ID", "ID");
+        defaultConfig.put("COMMANDLOG_ID", "ID"); // Hub channel
+        defaultConfig.put("ERORRLOG_ID", "ID"); // Hub channel
+        defaultConfig.put("SERVERLOG_ID", "ID"); // Home channel
+        defaultConfig.put("MESSAGELOGS_ID", "ID"); // Home channel
     }
 
     public ConfigManager(TVBot bot) {
