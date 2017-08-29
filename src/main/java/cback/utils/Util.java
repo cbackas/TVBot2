@@ -95,7 +95,7 @@ public class Util {
      * Send report
      */
     public static void reportHome(IMessage message, Exception e) {
-        IChannel errorChannel = client.getChannelByID(Long.parseLong(cm.getConfigValue("errors_ID")));
+        IChannel errorChannel = client.getChannelByID(Long.parseLong(cm.getConfigValue("ERORRLOG_ID")));
 
         EmbedBuilder bld = new EmbedBuilder()
                 .withColor(BOT_COLOR)
@@ -125,7 +125,7 @@ public class Util {
     }
 
     public static void reportHome(Exception e) {
-        IChannel errorChannel = client.getChannelByID(Long.parseLong(cm.getConfigValue("errors_ID")));
+        IChannel errorChannel = client.getChannelByID(Long.parseLong(cm.getConfigValue("ERORRLOG_ID")));
 
         EmbedBuilder bld = new EmbedBuilder()
                 .withColor(BOT_COLOR)
@@ -154,7 +154,7 @@ public class Util {
      */
     public static void botLog(IMessage message) {
         try {
-        IChannel botLogChannel = client.getChannelByID(Long.parseLong(cm.getConfigValue("botlog_ID")));
+        IChannel botLogChannel = client.getChannelByID(Long.parseLong(cm.getConfigValue("COMMANDLOG_ID")));
 
         EmbedBuilder bld = new EmbedBuilder()
                 .withColor(BOT_COLOR)
@@ -189,7 +189,6 @@ public class Util {
 
     /**
      * Delete a message
-     *
      */
     public static void deleteMessage(IMessage message) {
         try {
@@ -197,6 +196,63 @@ public class Util {
         } catch (Exception e) {
             reportHome(message, e);
         }
+    }
+
+    /**
+     * Add a server log
+     */
+    public static IMessage sendLog(IMessage message, String text) {
+        RequestBuffer.RequestFuture<IMessage> future = RequestBuffer.request(() -> {
+            try {
+                IUser user = message.getAuthor();
+                IChannel serverLogChannel = client.getChannelByID(Long.parseLong(cm.getConfigValue("SERVERLOG_ID")));
+
+                new EmbedBuilder();
+                EmbedBuilder embed = new EmbedBuilder();
+
+                embed.withFooterIcon(getAvatar(user));
+                embed.withFooterText("Action by @" + getTag(user));
+
+                embed.withDescription(text);
+
+                embed.withTimestamp(System.currentTimeMillis());
+
+                IDiscordClient client = TVBot.getInstance().getClient();
+                return new MessageBuilder(client).withEmbed(embed.withColor(Color.GRAY).build())
+                        .withChannel(serverLogChannel).send();
+            } catch (Exception e) {
+                reportHome(e);
+            }
+            return null;
+        });
+        return future.get();
+    }
+
+    public static IMessage sendLog(IMessage message, String text, Color color) {
+        RequestBuffer.RequestFuture<IMessage> future = RequestBuffer.request(() -> {
+            try {
+                IUser user = message.getAuthor();
+                IChannel serverLogChannel = client.getChannelByID(Long.parseLong(cm.getConfigValue("SERVERLOG_ID")));
+
+                new EmbedBuilder();
+                EmbedBuilder embed = new EmbedBuilder();
+
+                embed.withFooterIcon(getAvatar(user));
+                embed.withFooterText("Action by @" + getTag(user));
+
+                embed.withDescription(text);
+
+                embed.withTimestamp(System.currentTimeMillis());
+
+                IDiscordClient client = TVBot.getInstance().getClient();
+                return new MessageBuilder(client).withEmbed(embed.withColor(color).build())
+                        .withChannel(serverLogChannel).send();
+            } catch (Exception e) {
+                reportHome(e);
+            }
+            return null;
+        });
+        return future.get();
     }
 
 
