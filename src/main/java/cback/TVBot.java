@@ -158,6 +158,17 @@ public class TVBot {
 
     public static String getPrefix() { return prefix; }
 
+    public static IGuild getHomeGuild() {
+        IGuild homeGuild = getClient().getGuildByID(Long.parseLong(configManager.getConfigValue("HOMESERVER_ID")));
+        return homeGuild;
+    }
+
+    public static IGuild getHubGuild() {
+        IGuild hubGuild = getClient().getGuildByID(346104115169853440l);
+        return hubGuild;
+    }
+
+
     private void registerAllCommands() {
         new Reflections("cback.commands").getSubTypesOf(Command.class).forEach(commandImpl -> {
             try {
