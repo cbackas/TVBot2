@@ -26,7 +26,6 @@ public class ConfigManager {
         defaultConfig.put("left", "0");
         defaultConfig.put("muted", new ArrayList<String>());
         defaultConfig.put("bot_color", "023563");
-        defaultConfig.put("SERVERHUB_ID", "ID");
         defaultConfig.put("HOMESERVER_ID", "ID");
         defaultConfig.put("COMMANDLOG_ID", "ID"); // Hub channel
         defaultConfig.put("ERORRLOG_ID", "ID"); // Hub channel
