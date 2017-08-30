@@ -39,11 +39,6 @@ public class CommandTrigger implements Command {
     @Override
     public void execute(IMessage message, String content, String[] args, IUser author, IGuild guild, List<Long> roleIDs, boolean isPrivate, IDiscordClient client, TVBot bot) {
         try {
-            List<IChannel> channels = client.getChannels();
-            for (IChannel c : channels) {
-                System.out.println(c.getName() + " - - - - - " + c.getStringID());
-            }
-
             message.delete();
         } catch (Exception e) {
             Util.reportHome(message, e);
