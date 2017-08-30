@@ -84,8 +84,6 @@ public class TVBot {
 
         prefix = configManager.getConfigValue("command_prefix");
 
-        checkChannels();
-
         ClientBuilder clientBuilder = new ClientBuilder();
         clientBuilder.withToken(token.get());
         clientBuilder.setMaxReconnectAttempts(5);
@@ -153,6 +151,7 @@ public class TVBot {
 
     @EventSubscriber
     public void onReadyEvent(ReadyEvent event) {
+        checkChannels();
         System.out.println("Logged in.");
 
         startTime = System.currentTimeMillis();
@@ -207,16 +206,28 @@ public class TVBot {
     }
 
     private void checkChannels() {
-        List<String> channels = new ArrayList<>();
-        channels.add(configManager.getConfigValue("SERVERLOG_ID"));
-        channels.add(configManager.getConfigValue("MESSAGELOGS_ID"));
+        List<String> homeChannels = new ArrayList<>();
+        homeChannels.add(configManager.getConfigValue("SERVERLOG_ID"));
+        homeChannels.add(configManager.getConfigValue("MESSAGELOGS_ID"));
 
-        for (String id : channels) {
+        for (String id : homeChannels) {
             try {
                 IChannel channel = getHomeGuild().getChannelByID(Long.parseLong(id));
                 System.out.printf("%s channel matched from config\n", channel.getName());
             } catch (Exception e) {
                 System.out.printf("ID %s did not match a channel in the home server\n", id);
+            }
+        }
+
+        List<String> hubChannels = new ArrayList<>();
+        hubChannels.add(configManager.getConfigValue("COMMANDLOG_ID"));
+        hubChannels.add(configManager.getConfigValue("ERORRLOG_ID"));
+
+        for (String id : hubChannels) {
+            try {
+                IChannel channel = getHubGuild().getChannelByID(Long.parseLong(id));
+            } catch (Exception e) {
+                System.out.printf("ID %s did not match a channel in the hub server\n", id);
             }
         }
     }
