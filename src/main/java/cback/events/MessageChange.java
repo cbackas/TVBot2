@@ -21,7 +21,7 @@ public class MessageChange {
     @EventSubscriber
     public void messageDeleted(MessageDeleteEvent event) {
         ConfigManager cm = TVBot.getConfigManager();
-        IChannel MESSAGE_LOGS = event.getClient().getChannelByID(Long.parseLong(cm.getConfigValue("MESSAGE_LOGS")));
+        IChannel MESSAGE_LOGS = event.getClient().getChannelByID(Long.parseLong(cm.getConfigValue("MESSAGELOGS_ID")));
         IMessage message = event.getMessage();
         IUser author = event.getAuthor();
         IChannel channel = event.getChannel();
@@ -50,7 +50,7 @@ public class MessageChange {
     @EventSubscriber
     public void messageEdited(MessageUpdateEvent event) {
         ConfigManager cm = TVBot.getConfigManager();
-        IChannel MESSAGE_LOGS = event.getClient().getChannelByID(Long.parseLong(cm.getConfigValue("MESSAGE_LOGS")));
+        IChannel MESSAGE_LOGS = event.getClient().getChannelByID(Long.parseLong(cm.getConfigValue("MESSAGELOGS")));
         IMessage message = event.getMessage();
         IMessage oldMessage = event.getOldMessage();
         IMessage newMessage = event.getNewMessage();
