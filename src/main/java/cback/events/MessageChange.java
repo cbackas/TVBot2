@@ -42,7 +42,7 @@ public class MessageChange {
                     .withFooterText("User ID: " + author.getStringID())
                     .withTimestamp(System.currentTimeMillis());
 
-            Util.embed(MESSAGE_LOGS, bld.build());
+            Util.sendEmbed(MESSAGE_LOGS, bld.build());
         }
 
     }
@@ -50,7 +50,7 @@ public class MessageChange {
     @EventSubscriber
     public void messageEdited(MessageUpdateEvent event) {
         ConfigManager cm = TVBot.getConfigManager();
-        IChannel MESSAGE_LOGS = event.getClient().getChannelByID(Long.parseLong(cm.getConfigValue("MESSAGELOGS")));
+        IChannel MESSAGE_LOGS = event.getClient().getChannelByID(Long.parseLong(cm.getConfigValue("MESSAGELOGS_ID")));
         IMessage message = event.getMessage();
         IMessage oldMessage = event.getOldMessage();
         IMessage newMessage = event.getNewMessage();
@@ -67,7 +67,7 @@ public class MessageChange {
                 .withFooterText("ID: " + message.getStringID())
                 .withTimestamp(System.currentTimeMillis());
 
-        Util.embed(MESSAGE_LOGS, bld.build());
+        Util.sendEmbed(MESSAGE_LOGS, bld.build());
     }
 
 }

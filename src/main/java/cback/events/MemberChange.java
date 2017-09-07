@@ -71,7 +71,7 @@ public class MemberChange {
                 .withTimestamp(System.currentTimeMillis())
                 .withColor(Color.GREEN);
 
-        Util.embed(guild.getChannelByID(266655441449254914l), bld.build());
+        Util.sendEmbed(guild.getChannelByID(266655441449254914l), bld.build());
     }
 
     @EventSubscriber
@@ -103,7 +103,7 @@ public class MemberChange {
                 .withTimestamp(System.currentTimeMillis())
                 .withColor(Color.YELLOW);
 
-        Util.embed(guild.getChannelByID(266655441449254914l), bld.build());
+        Util.sendEmbed(guild.getChannelByID(266655441449254914l), bld.build());
 
     }
 
@@ -137,6 +137,6 @@ public class MemberChange {
                 .withTimestamp(System.currentTimeMillis())
                 .withColor(Color.RED);
 
-        Util.embed(guild.getChannelByID(266655441449254914l), bld.build());
+        Util.sendEmbed(guild.getChannelByID(266655441449254914l), bld.build());
     }
 }

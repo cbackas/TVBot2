@@ -65,7 +65,7 @@ public class TVBot {
         client.getDispatcher().registerListener(this);
         client.getDispatcher().registerListener(new MessageChange(this));
         client.getDispatcher().registerListener(new MemberChange(this));
-        client.getDispatcher().registerListener(new ChannelChange((this)));
+        client.getDispatcher().registerListener(new ChannelChange(this));
     }
 
     private void connect() {

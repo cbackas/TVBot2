@@ -67,17 +67,17 @@ public class Util {
      * Send simple fast embeds
      */
     public static void simpleEmbed(IChannel channel, String message) {
-        embed(channel, new EmbedBuilder().withDescription(message).withColor(BOT_COLOR).build());
+        sendEmbed(channel, new EmbedBuilder().withDescription(message).withColor(BOT_COLOR).build());
     }
 
     public static void simpleEmbed(IChannel channel, String message, Color color) {
-        embed(channel, new EmbedBuilder().withDescription(message).withColor(color).build());
+        sendEmbed(channel, new EmbedBuilder().withDescription(message).withColor(color).build());
     }
 
     /**
-     * Send embed objects
+     * Send sendEmbed objects
      */
-    public static IMessage embed(IChannel channel, EmbedObject embedObject) {
+    public static IMessage sendEmbed(IChannel channel, EmbedObject embedObject) {
         channel.setTypingStatus(true);
         RequestBuffer.RequestFuture<IMessage> future = RequestBuffer.request(() -> {
             try {
@@ -95,6 +95,8 @@ public class Util {
      * Send report
      */
     public static void reportHome(IMessage message, Exception e) {
+        e.printStackTrace();
+
         IChannel errorChannel = client.getChannelByID(Long.parseLong(cm.getConfigValue("ERORRLOG_ID")));
 
         EmbedBuilder bld = new EmbedBuilder()
@@ -114,17 +116,19 @@ public class Util {
         }
 
         String stackString = stack.toString();
-        if (stackString.length() > 1800) {
+        if (stackString.length() > 1024) {
             stackString = stackString.substring(0, 1800);
         }
 
-            bld
-                    .appendField("Stack:", stackString, false);
+        bld
+                .appendField("Stack:", stackString, false);
 
-        embed(errorChannel, bld.build());
+        sendEmbed(errorChannel, bld.build());
     }
 
     public static void reportHome(Exception e) {
+        e.printStackTrace();
+
         IChannel errorChannel = client.getChannelByID(Long.parseLong(cm.getConfigValue("ERORRLOG_ID")));
 
         EmbedBuilder bld = new EmbedBuilder()
@@ -139,14 +143,14 @@ public class Util {
         }
 
         String stackString = stack.toString();
-        if (stackString.length() > 1800) {
+        if (stackString.length() > 1024) {
             stackString = stackString.substring(0, 1800);
         }
 
         bld
                 .appendField("Stack:", stackString, false);
 
-        embed(errorChannel, bld.build());
+        sendEmbed(errorChannel, bld.build());
     }
 
     /**
@@ -163,7 +167,7 @@ public class Util {
                 .withDesc(message.getFormattedContent())
                 .withFooterText(message.getGuild().getName() + "/#" + message.getChannel().getName());
 
-        embed(botLogChannel, bld.build());
+        sendEmbed(botLogChannel, bld.build());
     } catch (Exception e) {
             reportHome(message, e);
         }
@@ -181,7 +185,7 @@ public class Util {
                     .withDesc(command.getDescription())
                     .appendField("Syntax:", TVBot.getPrefix() + command.getSyntax(), false);
 
-            embed(message.getChannel(), bld.build());
+            sendEmbed(message.getChannel(), bld.build());
         } catch (Exception e) {
             reportHome(message, e);
         }
