@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>TVBot2</groupId>
-    <artifactId>TVBot2</artifactId>
+    <groupId>TestBot</groupId>
+    <artifactId>TestBot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <repositories>
@@ -20,12 +20,29 @@
         <dependency>
             <groupId>com.github.austinv11</groupId>
             <artifactId>Discord4J</artifactId>
-            <version>984f05d</version>
+            <version>51d680e</version>
         </dependency>
         <dependency>
             <groupId>com.uwetrottmann.trakt5</groupId>
             <artifactId>trakt-java</artifactId>
-            <version>5.2.1</version>
+            <version>5.7.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.moviejukebox</groupId>
+            <artifactId>api-imdb</artifactId>
+            <version>1.5</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        <!--manual gson version -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.6.2</version>
         </dependency>
         <dependency>
             <groupId>org.xerial</groupId>
@@ -78,7 +95,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>cback.TVBot</mainClass>
+                            <mainClass>cback.TestBot</mainClass>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
                         </manifest>

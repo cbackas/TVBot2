@@ -1,6 +1,6 @@
 package cback.events;
 
-import cback.TVBot;
+import cback.TestBot;
 import cback.utils.Util;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventSubscriber;
@@ -13,9 +13,9 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class ChannelChange {
-    private TVBot bot;
+    private TestBot bot;
 
-    public ChannelChange(TVBot bot) {
+    public ChannelChange(TestBot bot) {
         this.bot = bot;
     }
 

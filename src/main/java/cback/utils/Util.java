@@ -1,7 +1,7 @@
 package cback.utils;
 
 import cback.ConfigManager;
-import cback.TVBot;
+import cback.TestBot;
 import cback.commands.Command;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
@@ -13,11 +13,17 @@ import sx.blah.discord.util.MessageBuilder;
 import sx.blah.discord.util.RequestBuffer;
 
 import java.awt.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Util {
-    static IDiscordClient client = TVBot.getClient();
-    static ConfigManager cm = TVBot.getConfigManager();
+    static IDiscordClient client = TestBot.getClient();
+    static ConfigManager cm = TestBot.getConfigManager();
     static Color BOT_COLOR = Color.decode("#" + cm.getConfigValue("bot_color"));
+
+    private static final Pattern USER_MENTION_PATTERN = Pattern.compile("^<@!?(\\d+)>$");
 
     /**
      * Returns a default discord avatar if a user's avatar is null for some reason
@@ -66,12 +72,12 @@ public class Util {
     /**
      * Send simple fast embeds
      */
-    public static void simpleEmbed(IChannel channel, String message) {
-        sendEmbed(channel, new EmbedBuilder().withDescription(message).withColor(BOT_COLOR).build());
+    public static IMessage simpleEmbed(IChannel channel, String message) {
+        return sendEmbed(channel, new EmbedBuilder().withDescription(message).withColor(BOT_COLOR).build());
     }
 
-    public static void simpleEmbed(IChannel channel, String message, Color color) {
-        sendEmbed(channel, new EmbedBuilder().withDescription(message).withColor(color).build());
+    public static IMessage simpleEmbed(IChannel channel, String message, Color color) {
+        return sendEmbed(channel, new EmbedBuilder().withDescription(message).withColor(color).build());
     }
 
     /**
@@ -181,9 +187,9 @@ public class Util {
             EmbedBuilder bld = new EmbedBuilder()
                     .withColor(BOT_COLOR)
                     .withAuthorName(command.getName())
-                    .withAuthorIcon(TVBot.getClient().getApplicationIconURL())
+                    .withAuthorIcon(TestBot.getClient().getApplicationIconURL())
                     .withDesc(command.getDescription())
-                    .appendField("Syntax:", TVBot.getPrefix() + command.getSyntax(), false);
+                    .appendField("Syntax:", TestBot.getPrefix() + command.getSyntax(), false);
 
             sendEmbed(message.getChannel(), bld.build());
         } catch (Exception e) {
@@ -221,7 +227,7 @@ public class Util {
 
                 embed.withTimestamp(System.currentTimeMillis());
 
-                IDiscordClient client = TVBot.getInstance().getClient();
+                IDiscordClient client = TestBot.getInstance().getClient();
                 return new MessageBuilder(client).withEmbed(embed.withColor(Color.GRAY).build())
                         .withChannel(serverLogChannel).send();
             } catch (Exception e) {
@@ -248,7 +254,7 @@ public class Util {
 
                 embed.withTimestamp(System.currentTimeMillis());
 
-                IDiscordClient client = TVBot.getInstance().getClient();
+                IDiscordClient client = TestBot.getInstance().getClient();
                 return new MessageBuilder(client).withEmbed(embed.withColor(color).build())
                         .withChannel(serverLogChannel).send();
             } catch (Exception e) {
@@ -257,6 +263,41 @@ public class Util {
             return null;
         });
         return future.get();
+    }
+
+    /**
+     * Changes the time to a 12 hour format
+     */
+    public static String to12Hour(String time) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("H:mm");
+            Date dateObj = sdf.parse(time);
+            return new SimpleDateFormat("K:mm").format(dateObj);
+        } catch (Exception e) {
+            reportHome(e);
+        }
+        return time;
+    }
+
+    /**
+     * returns a count of mentions
+     */
+    public static int mentionsCount(String content) {
+        String[] args = content.split(" ");
+        if (args.length > 0) {
+            int count = 0;
+            for (String arg : args) {
+                Matcher matcher = USER_MENTION_PATTERN.matcher(arg);
+                if (matcher.matches()) {
+                    count++;
+                }
+            }
+            System.out.println(count);
+            return count;
+        } else {
+            System.out.println("0");
+            return 0;
+        }
     }
 
 

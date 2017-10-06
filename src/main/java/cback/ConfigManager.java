@@ -12,7 +12,7 @@ import java.util.*;
 
 public class ConfigManager {
 
-    private TVBot bot;
+    private TestBot bot;
 
     private File configFile;
     private JSONObject configJson;
@@ -33,7 +33,7 @@ public class ConfigManager {
         defaultConfig.put("MESSAGELOGS_ID", "ID"); // Home channel
     }
 
-    public ConfigManager(TVBot bot) {
+    public ConfigManager(TestBot bot) {
         this.bot = bot;
         initConfig();
     }
@@ -130,7 +130,7 @@ public class ConfigManager {
 
     static {
         try {
-            botPath = new File(TVBot.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getParentFile();
+            botPath = new File(TestBot.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getParentFile();
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }

@@ -1,6 +1,6 @@
 package cback.commands;
 
-import cback.TVBot;
+import cback.TestBot;
 import cback.utils.Util;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IGuild;
@@ -40,13 +40,13 @@ public class CommandHelp implements Command {
     }
 
     @Override
-    public void execute(IMessage message, String content, String[] args, IUser author, IGuild guild, List<Long> roleIDs, boolean isPrivate, IDiscordClient client, TVBot bot) {
+    public void execute(IMessage message, String content, String[] args, IUser author, IGuild guild, List<Long> roleIDs, boolean isPrivate, IDiscordClient client, TestBot bot) {
         if (args.length >= 1) {
             EmbedBuilder embed = new EmbedBuilder();
             embed.withTitle("Commands:");
 
             List<Long> roles = message.getAuthor().getRolesForGuild(guild).stream().map(role -> role.getLongID()).collect(Collectors.toList());
-            for (Command c : TVBot.registeredCommands) {
+            for (Command c : TestBot.registeredCommands) {
 
                 if (c.getDescription() != null) {
 

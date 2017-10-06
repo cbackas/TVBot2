@@ -1,7 +1,7 @@
 package cback.events;
 
 import cback.Roles;
-import cback.TVBot;
+import cback.TestBot;
 import cback.utils.Util;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.guild.member.UserBanEvent;
@@ -16,9 +16,9 @@ import java.time.ZoneOffset;
 import java.util.List;
 
 public class MemberChange {
-    private TVBot bot;
+    private TestBot bot;
 
-    public MemberChange(TVBot bot) {
+    public MemberChange(TestBot bot) {
         this.bot = bot;
     }
 

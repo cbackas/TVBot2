@@ -1,7 +1,7 @@
 package cback.events;
 
 import cback.ConfigManager;
-import cback.TVBot;
+import cback.TestBot;
 import cback.utils.Util;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageDeleteEvent;
@@ -12,15 +12,15 @@ import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.EmbedBuilder;
 
 public class MessageChange {
-    private TVBot bot;
+    private TestBot bot;
 
-    public MessageChange(TVBot bot) {
+    public MessageChange(TestBot bot) {
         this.bot = bot;
     }
 
     @EventSubscriber
     public void messageDeleted(MessageDeleteEvent event) {
-        ConfigManager cm = TVBot.getConfigManager();
+        ConfigManager cm = TestBot.getConfigManager();
         IChannel MESSAGE_LOGS = event.getClient().getChannelByID(Long.parseLong(cm.getConfigValue("MESSAGELOGS_ID")));
         IMessage message = event.getMessage();
         IUser author = event.getAuthor();
@@ -49,7 +49,7 @@ public class MessageChange {
 
     @EventSubscriber
     public void messageEdited(MessageUpdateEvent event) {
-        ConfigManager cm = TVBot.getConfigManager();
+        ConfigManager cm = TestBot.getConfigManager();
         IChannel MESSAGE_LOGS = event.getClient().getChannelByID(Long.parseLong(cm.getConfigValue("MESSAGELOGS_ID")));
         IMessage message = event.getMessage();
         IMessage oldMessage = event.getOldMessage();

@@ -18,6 +18,7 @@ import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.modules.Configuration;
 import sx.blah.discord.util.DiscordException;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,18 +27,23 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class TVBot {
+public class TestBot {
 
-    private static TVBot instance;
+    private static TestBot instance;
 
     private IDiscordClient client;
     private static ConfigManager configManager;
+    private TraktManager traktManager;
 
     public static List<Command> registeredCommands = new ArrayList<>();
 
-    static private String prefix = "?";
-    private Pattern COMMAND_PATTERN = Pattern.compile("^\\?([^\\s]+) ?(.*)", Pattern.CASE_INSENSITIVE);
+    static private String prefix = ">";
+    private Pattern COMMAND_PATTERN = Pattern.compile("^\\>([^\\s]+) ?(.*)", Pattern.CASE_INSENSITIVE);
     public List<String> prefixes = new ArrayList<>();
+
+    public static final long ERRORLOG_CH_ID = 346104666796589056l;
+    public static final long BOTLOG_CH_ID = 346483682376286208l;
+    public static final long BOTPM_CH_ID = 346104720903110656l;
 
     private static IGuild homeGuild;
     private static IGuild hubGuild;
@@ -45,16 +51,16 @@ public class TVBot {
     private long startTime;
 
     public static void main(String[] args) {
-        new TVBot();
+        new TestBot();
     }
 
-    public TVBot() {
+    public TestBot() {
         instance = this;
         registerAllCommands();
 
         //instantiate config manager first as connect() relies on tokens
         configManager = new ConfigManager(this);
-        prefixes.add(TVBot.getPrefix());
+        prefixes.add(TestBot.getPrefix());
         prefixes.add("t!");
         prefixes.add("!");
         prefixes.add("!g");
@@ -66,6 +72,8 @@ public class TVBot {
         client.getDispatcher().registerListener(new MessageChange(this));
         client.getDispatcher().registerListener(new MemberChange(this));
         client.getDispatcher().registerListener(new ChannelChange(this));
+
+        traktManager = new TraktManager(this);
     }
 
     private void connect() {
@@ -135,16 +143,18 @@ public class TVBot {
                     Util.simpleEmbed(message.getChannel(), "You don't have permission to perform this command.");
                 }
             }
-        } else if (!message.getChannel().isPrivate()){
-            List<IUser> mentions = message.getMentions();
-            if (mentions.size() >= 10) {
+        } else if (!message.getChannel().isPrivate()) {
+            /**
+             * Deletes messages/bans users for using too many @ mentions
+             */
+            if (Util.mentionsCount(message.getContent()) > 1) {
                 try {
-                    guild.banUser(message.getAuthor(), "Mention spam isn't allowed. Cut that out.", 1);
-
-
+                    Util.simpleEmbed(message.getChannel(), "I ban u");
                 } catch (Exception e) {
-                    Util.reportHome(message, e);
+                    Util.reportHome(e);
                 }
+            } else if (Util.mentionsCount(message.getContent()) > 0) {
+                Util.simpleEmbed(message.getChannel(), "I delete you");
             }
         }
     }
@@ -161,7 +171,7 @@ public class TVBot {
     /*
      * Misc Utilities
      */
-    public static TVBot getInstance() {
+    public static TestBot getInstance() {
         return instance;
     }
 
@@ -169,9 +179,17 @@ public class TVBot {
         return instance.client;
     }
 
-    public static ConfigManager getConfigManager() { return configManager; }
+    public static ConfigManager getConfigManager() {
+        return configManager;
+    }
 
-    public static String getPrefix() { return prefix; }
+    public TraktManager getTraktManager() {
+        return traktManager;
+    }
+
+    public static String getPrefix() {
+        return prefix;
+    }
 
     public static IGuild getHomeGuild() {
         homeGuild = getClient().getGuildByID(Long.parseLong(configManager.getConfigValue("HOMESERVER_ID")));
