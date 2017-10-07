@@ -1,6 +1,7 @@
 package cback.commands;
 
 import cback.TestBot;
+import cback.TraktManager;
 import cback.utils.Util;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IChannel;
@@ -39,20 +40,14 @@ public class CommandTrigger implements Command {
     @Override
     public void execute(IMessage message, String content, String[] args, IUser author, IGuild guild, List<Long> roleIDs, boolean isPrivate, IDiscordClient client, TestBot bot) {
         try {
-            List<IChannel> channels = guild.getChannels();
-            StringBuilder bld = new StringBuilder();
-            for (IChannel c : channels) {
-                bld.append("**" + c.getName() + "** - " + c.getStringID());
-                bld.append("\n__CH_POS:__ " + c.getPosition());
-                if (c.getCategory() != null) {
-                    bld.append("\n__CAT:__ " + c.getCategory().getName());
-                    bld.append("\n__CAT_POS:__ " + c.getCategory().getPosition());
-                }
-                bld.append("\n");
-            }
+            String theflash1 = bot.getTraktManager().searchTmdbShow("the flash");
+            String theflash2 = bot.getTraktManager().searchTmdbShow("th flash");
+            String theflash3 = bot.getTraktManager().searchTmdbShow("the flashh");
 
-            System.out.println(bld.toString());
-            Util.sendMessage(message.getChannel(), bld.toString());
+            System.out.println(theflash1);
+            System.out.println(theflash2);
+            System.out.println(theflash3);
+
 
             message.delete();
         } catch (Exception e) {
