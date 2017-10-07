@@ -79,8 +79,8 @@ public class TraktManager {
     public String searchTmdbMovie(String movieName) {
         try {
             SearchService service = tmdb.searchService();
-            Response<MovieResultsPage> search = service.movie(movieName, null, null, true, null, null, null).execute();
-            if (search.isSuccessful()) {
+            Response<MovieResultsPage> search = service.movie(movieName, 1, null, true, null, null, null).execute();
+            if (search.isSuccessful() && !search.body().results.isEmpty()) {
                 Response<com.uwetrottmann.tmdb2.entities.Movie> movie = tmdb.moviesService().summary(search.body().results.get(0).id).execute();
                 if (movie.isSuccessful()) {
                     return movie.body().imdb_id;
@@ -93,15 +93,21 @@ public class TraktManager {
     public String searchTmdbShow(String showName) {
         try {
             SearchService service = tmdb.searchService();
-            Response<TvShowResultsPage> search = service.tv(showName, null, null, null, null).execute();
-            if (search.isSuccessful()) {
-                Response<com.uwetrottmann.tmdb2.entities.TvShow> show = tmdb.tvService().tv(search.body().results.get(0).id).execute();
-                if (show.isSuccessful()) {
-                    return show.body().external_ids.imdb_id;
+            Response<TvShowResultsPage> search = service.tv(showName, 1, null, null, "ngram").execute();
+            if (search.isSuccessful() && !search.body().results.isEmpty()) {
+                System.out.println("Search successful");
+                //Response<com.uwetrottmann.tmdb2.entities.TvShow> show = tmdb.tvService().tv(search.body().results.get(0).id).execute();
+                Response<com.uwetrottmann.tmdb2.entities.TvExternalIds> show1 = tmdb.tvService().externalIds(search.body().results.get(0).id, null).execute();
+                if (show1.isSuccessful()) {
+                    System.out.println("Show successful");
+                    //return show.body().external_ids.imdb_id;
+                    return show1.body().imdb_id;
                 }
             }
         } catch (Exception e) {
+            System.out.println("error");
         }
+        System.out.println("NULLL");
         return null;
     }
 
