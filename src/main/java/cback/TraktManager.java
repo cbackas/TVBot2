@@ -44,18 +44,13 @@ public class TraktManager {
             return;
         }
         tmdb = new Tmdb(tmdbToken.get());
-        System.out.println(tmdb.apiKey());
     }
 
     public Show showSummaryFromName(String showName) {
         try {
-            //Response<List<SearchResult>> search = trakt.search().textQuery(showName, Type.SHOW, null, 1, 1).execute();
-            Response<List<SearchResult>> search = trakt.search().textQuery(Type.SHOW, showName, null, null, null, null, null, null, Extended.FULL, 1, 1).execute();
-            if (search.isSuccessful() && !search.body().isEmpty()) {
-                Response<Show> show = trakt.shows().summary(search.body().get(0).show.ids.imdb, Extended.FULL).execute();
-                if (show.isSuccessful()) {
-                    return show.body();
-                }
+            Response<Show> show = trakt.shows().summary(searchTmdbShow(showName), Extended.FULL).execute();
+            if (show.isSuccessful()) {
+                return show.body();
             }
         } catch (Exception e) {
         }
@@ -64,12 +59,9 @@ public class TraktManager {
 
     public Movie movieSummaryFromName(String movieName) {
         try {
-            Response<List<SearchResult>> search = trakt.search().textQuery(Type.MOVIE, movieName, null, null, null, null, null, null, Extended.FULL, 1, 1).execute();
-            if (search.isSuccessful() && !search.body().isEmpty()) {
-                Response<Movie> movie = trakt.movies().summary(search.body().get(0).movie.ids.imdb, Extended.FULL).execute();
-                if (movie.isSuccessful()) {
-                    return movie.body();
-                }
+            Response<Movie> movie = trakt.movies().summary(searchTmdbMovie(movieName), Extended.FULL).execute();
+            if (movie.isSuccessful()) {
+                return movie.body();
             }
         } catch (Exception e) {
         }
@@ -90,24 +82,20 @@ public class TraktManager {
         }
         return null;
     }
+
     public String searchTmdbShow(String showName) {
         try {
             SearchService service = tmdb.searchService();
-            Response<TvShowResultsPage> search = service.tv(showName, 1, null, null, "ngram").execute();
+            Response<TvShowResultsPage> search = service.tv(showName, 1, null, null, null).execute();
             if (search.isSuccessful() && !search.body().results.isEmpty()) {
-                System.out.println("Search successful");
-                //Response<com.uwetrottmann.tmdb2.entities.TvShow> show = tmdb.tvService().tv(search.body().results.get(0).id).execute();
-                Response<com.uwetrottmann.tmdb2.entities.TvExternalIds> show1 = tmdb.tvService().externalIds(search.body().results.get(0).id, null).execute();
-                if (show1.isSuccessful()) {
-                    System.out.println("Show successful");
-                    //return show.body().external_ids.imdb_id;
-                    return show1.body().imdb_id;
+                Response<com.uwetrottmann.tmdb2.entities.TvExternalIds> show = tmdb.tvService().externalIds(search.body().results.get(0).id, null).execute();
+                if (show.isSuccessful()) {
+                    System.out.println(show.body().imdb_id);
+                    return show.body().imdb_id;
                 }
             }
         } catch (Exception e) {
-            System.out.println("error");
         }
-        System.out.println("NULLL");
         return null;
     }
 

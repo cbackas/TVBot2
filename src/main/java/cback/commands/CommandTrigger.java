@@ -40,13 +40,6 @@ public class CommandTrigger implements Command {
     @Override
     public void execute(IMessage message, String content, String[] args, IUser author, IGuild guild, List<Long> roleIDs, boolean isPrivate, IDiscordClient client, TestBot bot) {
         try {
-            String theflash1 = bot.getTraktManager().searchTmdbShow("the flash");
-            String theflash2 = bot.getTraktManager().searchTmdbShow("th flash");
-            String theflash3 = bot.getTraktManager().searchTmdbShow("the flashh");
-
-            System.out.println(theflash1);
-            System.out.println(theflash2);
-            System.out.println(theflash3);
 
 
             message.delete();
